@@ -1,0 +1,539 @@
+\documentclass[12pt,a4paper]{report}
+
+% ── Packages ──────────────────────────────────────────────
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{setspace}
+\usepackage{caption}
+\usepackage{listings}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{amsmath}
+
+% ── Hyperlink colours ─────────────────────────────────────
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue!70!black,
+    urlcolor=blue!70!black,
+    citecolor=blue!70!black
+}
+
+% ── Code listing style ────────────────────────────────────
+\lstset{
+    basicstyle=\ttfamily\small,
+    backgroundcolor=\color{gray!10},
+    frame=single,
+    rulecolor=\color{gray!40},
+    breaklines=true,
+    keywordstyle=\color{blue},
+    commentstyle=\color{green!50!black},
+    stringstyle=\color{red!70!black},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    numbersep=5pt
+}
+
+% ── Header / Footer ───────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\small CSC336 -- Web Technologies}
+\lhead{\small Assignment 3}
+\rfoot{\thepage}
+\lfoot{\small COMSATS University Islamabad, Vehari Campus}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+% ── Section title formatting ──────────────────────────────
+\titleformat{\chapter}[display]
+  {\normalfont\Large\bfseries\centering}
+  {Chapter \thechapter}{12pt}{\large}
+\titlespacing*{\chapter}{0pt}{20pt}{15pt}
+
+\titleformat{\section}{\normalfont\large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalfont\normalsize\bfseries}{\thesubsection}{1em}{}
+
+% ── Line spacing ──────────────────────────────────────────
+\onehalfspacing
+
+% ══════════════════════════════════════════════════════════
+\begin{document}
+
+% ── Title Page ────────────────────────────────────────────
+\begin{titlepage}
+\centering
+\vspace*{0.5cm}
+
+{\Large\bfseries COMSATS University Islamabad, Vehari Campus\\[4pt]
+Pakistan}\\[0.4cm]
+
+{\normalsize Department of Computer Science}\\[0.6cm]
+
+\rule{\linewidth}{0.5pt}\\[0.3cm]
+{\large\bfseries Course: CSC336 -- Web Technologies}\\[0.2cm]
+{\large\bfseries Assignment 3}\\[0.3cm]
+\rule{\linewidth}{0.5pt}\\[0.6cm]
+
+\textbf{GitHub Repository Link:}\\[0.2cm]
+\href{https://github.com/ahsanalich358/Assignment3WebTechnologies}{\texttt{https://github.com/ahsanalich358/Assignment3WebTechnologies}}\\[0.4cm]
+
+
+
+\includegraphics[width=0.28\textwidth]{logo.png}\\[1.2cm]
+
+{\large\bfseries
+Building a Laravel-Based To-Do List Management System\\[4pt]
+with Full CRUD Functionality, Priority Management,\\[4pt]
+Status Tracking, and Filter Feature}\\[0.8cm]
+
+{\normalsize for the Degree of}\\[0.3cm]
+
+{\large\bfseries
+Bachelor of Science in Software Engineering}\\[1.5cm]
+
+\begin{tabular}{ll}
+\textbf{Submitted By:} & Ahsan Ali\\[4pt]
+\textbf{Student ID:}   & CIIT/SP24-BSE-004/VHR\\[4pt]
+\textbf{Instructor:}   & Mam Yasmeen Jana\\[4pt]
+\textbf{Semester:}     & Spring 2026\\
+\end{tabular}
+
+\vfill
+{\small\textit{Department of Computer Science, COMSATS University Islamabad, Vehari Campus}}
+\end{titlepage}
+
+% ── Front Matter ──────────────────────────────────────────
+\pagenumbering{roman}
+
+% ── Abstract ──────────────────────────────────────────────
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+
+This report presents the design and implementation of a web-based To-Do List
+Management System developed using the Laravel PHP framework. The system is built
+following the Model--View--Controller (MVC) architectural pattern and provides a
+complete suite of CRUD (Create, Read, Update, Delete) operations for managing task
+records. Key features include task priority levels (Low, Medium, High), due date
+assignment, status tracking (Pending/Completed), filter by status and priority, and
+a real-time statistics dashboard. The application is deployed locally using Laravel's
+built-in Artisan development server and uses MySQL as the backend database. The
+project demonstrates practical application of Laravel routing, Eloquent ORM, Blade
+templating, and form handling in a real-world web development scenario.
+
+\vspace{1cm}
+\textbf{Keywords:} Laravel, CRUD, MVC, PHP, To-Do List, Task Management,
+Priority, Status Tracking, Blade Templates, Eloquent ORM, MySQL.
+
+% ── Abbreviations ─────────────────────────────────────────
+\chapter*{List of Abbreviations}
+\addcontentsline{toc}{chapter}{List of Abbreviations}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\textbf{Abbreviation} & \textbf{Full Form} \\
+\midrule
+CRUD   & Create, Read, Update, Delete \\
+MVC    & Model--View--Controller \\
+PHP    & Hypertext Preprocessor \\
+HTML   & HyperText Markup Language \\
+CSS    & Cascading Style Sheets \\
+SQL    & Structured Query Language \\
+URL    & Uniform Resource Locator \\
+ORM    & Object Relational Mapping \\
+IDE    & Integrated Development Environment \\
+UI     & User Interface \\
+DB     & Database \\
+HTTP   & Hypertext Transfer Protocol \\
+REST   & Representational State Transfer \\
+CMD    & Command Prompt / Terminal \\
+\bottomrule
+\end{tabularx}
+
+% ── Table of Contents ─────────────────────────────────────
+\tableofcontents
+\listoftables
+\listoffigures
+
+% ── Main Content ──────────────────────────────────────────
+\clearpage
+\pagenumbering{arabic}
+
+% ══════════════════════════════════════════════════════════
+\chapter{Introduction and System Overview}
+% ══════════════════════════════════════════════════════════
+
+\section{Background and Motivation}
+
+Managing daily tasks and work items efficiently is a fundamental requirement in
+modern life — ranging from personal productivity tools and academic assignment
+trackers to professional project management systems. Traditional methods of task
+management, such as handwritten lists or spreadsheets, are inefficient, easy to lose,
+and difficult to scale when tasks grow in number.
+
+This project, \textbf{Building a Laravel-Based To-Do List Management System with
+Full CRUD Functionality, Priority Management, Status Tracking, and Filter Feature},
+is designed to address these challenges by implementing a complete task management
+solution using the Laravel framework. Laravel's expressive syntax, built-in ORM
+(Eloquent), and Blade templating engine make it an ideal choice for rapid development
+of data-driven web applications.
+
+The system enables users to add new tasks with a title, description, due date, and
+priority level; view all tasks in a structured table; update existing task details or
+change their status; and permanently delete tasks after explicit confirmation. A
+statistics dashboard shows real-time counts of total, pending, and completed tasks.
+Filter controls allow users to quickly narrow down tasks by status or priority level.
+
+\section{Tools and Technologies}
+
+Table~\ref{tab:tools} lists the tools and technologies selected for the development of
+this project. Each component was chosen based on compatibility, community support,
+and suitability for Laravel-based web development.
+
+\begin{table}[h!]
+\centering
+\caption{Tools and Technologies Used}
+\label{tab:tools}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\textwidth}{@{}llX@{}}
+\toprule
+\textbf{Tool / Technology} & \textbf{Version} & \textbf{Purpose} \\
+\midrule
+Laravel       & Latest (v11.x)   & Primary PHP framework; implements MVC architecture and handles routing, ORM, and views. \\
+PHP           & 8.x              & Server-side scripting language required to execute Laravel applications. \\
+Composer      & Latest           & PHP dependency manager used to install and manage Laravel packages. \\
+MySQL         & Latest           & Relational database used to persist task records including title, priority, status, and due date. \\
+Blade         & Built-in         & Laravel's templating engine used to build dynamic HTML views and forms. \\
+Bootstrap 5   & 5.x              & Frontend CSS framework used to create a responsive, clean user interface. \\
+VS Code       & Latest           & Primary code editor used for writing and debugging the application. \\
+Git \& GitHub & Latest           & Version control and remote repository hosting for the project codebase. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Project Objectives}
+
+The core objectives guiding the design and development of this system are:
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item \textbf{PO-1:} Design and implement a fully functional web application that
+    supports Create, Read, Update, and Delete operations on task records using the
+    Laravel MVC framework.
+
+    \item \textbf{PO-2:} Extend the base CRUD system with additional usability features
+    -- specifically, task priority assignment (Low, Medium, High), due date tracking,
+    status toggling (Pending/Completed), filter by status and priority, and a real-time
+    statistics dashboard.
+
+    \item \textbf{PO-3:} Follow clean code and architectural conventions (MVC pattern,
+    RESTful routing, Eloquent ORM) to produce a maintainable and extensible codebase.
+\end{itemize}
+
+% ══════════════════════════════════════════════════════════
+\chapter{Implementation}
+% ══════════════════════════════════════════════════════════
+
+\section{Development Environment}
+
+The project was built and tested on a local Windows machine using the tools listed in
+Table~\ref{tab:devenv}.
+
+\begin{table}[h!]
+\centering
+\caption{Development Environment Setup}
+\label{tab:devenv}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\textwidth}{@{}llX@{}}
+\toprule
+\textbf{Component} & \textbf{Tool / Technology} & \textbf{Role} \\
+\midrule
+Backend Framework  & Laravel (v11.x)     & MVC architecture, routing, ORM, validation. \\
+Programming Lang.  & PHP 8.x             & Server-side execution of Laravel code. \\
+Dependency Mgr.    & Composer            & Installs Laravel and all required packages. \\
+Database           & MySQL               & Stores task records: title, description, due date, priority, status. \\
+View Engine        & Blade + Bootstrap 5 & Dynamic UI pages: forms, tables, badges, alerts. \\
+Code Editor        & Visual Studio Code  & Writing, debugging, and managing files. \\
+Local Server       & Laravel Artisan     & Runs the application via \texttt{php artisan serve}. \\
+Version Control    & Git + GitHub        & Tracks code changes and hosts the repository. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Database Schema}
+
+The application uses a single \texttt{tasks} table in MySQL. Table~\ref{tab:schema}
+describes its structure.
+
+\begin{table}[h!]
+\centering
+\caption{Database Table: tasks}
+\label{tab:schema}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\textwidth}{@{}llX@{}}
+\toprule
+\textbf{Column} & \textbf{Type} & \textbf{Description} \\
+\midrule
+id          & BIGINT (PK, Auto) & Unique task identifier. \\
+title       & VARCHAR(255)      & Short title of the task (required). \\
+description & TEXT (nullable)   & Optional detailed description of the task. \\
+due\_date   & DATE (nullable)   & The deadline date for the task. \\
+priority    & ENUM              & Task priority: Low, Medium, or High. \\
+status      & ENUM              & Task status: Pending or Completed. \\
+created\_at & TIMESTAMP         & Auto-generated record creation timestamp. \\
+updated\_at & TIMESTAMP         & Auto-generated last update timestamp. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Project Setup and Execution}
+
+To run the project on a local machine, execute the following steps in the terminal
+from inside the project root directory:
+
+\begin{lstlisting}[language=bash, caption={Project Setup Commands}]
+# Step 1 - Create a new Laravel project
+composer create-project laravel/laravel todo-app
+cd todo-app
+
+# Step 2 - Copy all provided project files into the project folder
+
+# Step 3 - Configure the database in .env file
+# Set: DB_DATABASE=todo_app  DB_USERNAME=root  DB_PASSWORD=
+
+# Step 4 - Generate application key
+php artisan key:generate
+
+# Step 5 - Run database migrations to create the tasks table
+php artisan migrate
+
+# Step 6 - Start the local development server
+php artisan serve
+\end{lstlisting}
+
+After the server starts, open \texttt{http://127.0.0.1:8000} in any browser to
+access the application.
+
+\section{Application Routes}
+
+Table~\ref{tab:routes} describes all the routes defined in \texttt{routes/web.php}
+for the To-Do List application.
+
+\begin{table}[h!]
+\centering
+\caption{Application Routes}
+\label{tab:routes}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\textwidth}{@{}llllX@{}}
+\toprule
+\textbf{Method} & \textbf{URI} & \textbf{Controller Method} & \textbf{Route Name} & \textbf{Purpose} \\
+\midrule
+GET    & /                      & index        & tasks.index   & Show all tasks with filters. \\
+POST   & /tasks                 & store        & tasks.store   & Save a new task to DB. \\
+GET    & /tasks/\{task\}/edit   & edit         & tasks.edit    & Show the edit form. \\
+PUT    & /tasks/\{task\}        & update       & tasks.update  & Update an existing task. \\
+PATCH  & /tasks/\{task\}/toggle & toggleStatus & tasks.toggle  & Toggle Pending/Completed. \\
+DELETE & /tasks/\{task\}        & destroy      & tasks.destroy & Delete a task. \\
+GET    & /about                 & about        & about         & Show the About page. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Core Implementation Details}
+
+\subsection{CRUD Operations}
+
+All CRUD operations are implemented through Laravel's routing and a dedicated
+\texttt{TaskController}. The key controller methods are:
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item \textbf{index():} Retrieves all task records (with optional status and priority
+    filters) and passes them along with summary statistics (total, pending, completed
+    counts) to the \texttt{tasks/index} Blade view.
+
+    \item \textbf{store():} Validates incoming form data (title required, priority must
+    be Low/Medium/High, due date must be valid date format) and persists a new task
+    record to the \texttt{tasks} table with a default status of \textit{Pending}.
+
+    \item \textbf{edit(\$task):} Retrieves the specified task using Laravel's route model
+    binding and returns the pre-populated edit form view.
+
+    \item \textbf{update(\$task):} Validates and saves changes to the selected task
+    record, including any status change made via the edit form.
+
+    \item \textbf{toggleStatus(\$task):} A dedicated PATCH route that flips the task
+    status between \textit{Pending} and \textit{Completed} in a single click without
+    opening the edit form.
+
+    \item \textbf{destroy(\$task):} Permanently deletes the task record from the
+    database after a JavaScript confirmation dialog prevents accidental deletion.
+\end{itemize}
+
+\subsection{Task Model and Query Scopes}
+
+The \texttt{Task} Eloquent model defines the \texttt{\$fillable} array for mass
+assignment protection and two local query scopes:
+
+\begin{lstlisting}[language=PHP, caption={Task Model Scopes}]
+// Filter by status
+public function scopeByStatus($query, $status)
+{
+    if ($status && $status !== 'All') {
+        return $query->where('status', $status);
+    }
+    return $query;
+}
+
+// Filter by priority
+public function scopeByPriority($query, $priority)
+{
+    if ($priority && $priority !== 'All') {
+        return $query->where('priority', $priority);
+    }
+    return $query;
+}
+\end{lstlisting}
+
+These scopes allow clean, chainable filtering in the controller:
+\texttt{Task::byStatus(\$filter)->byPriority(\$priority)->get()}.
+
+\subsection{Key Features}
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item \textbf{Statistics Dashboard:} Three stat cards display real-time counts of
+    Total, Pending, and Completed tasks at the top of the main page.
+
+    \item \textbf{Priority Badges:} Color-coded badges (High = red, Medium = yellow,
+    Low = green) make task urgency immediately visible in the task table.
+
+    \item \textbf{Status Toggle:} A dedicated toggle button on each table row allows
+    users to mark tasks Pending or Completed without navigating to the edit page.
+
+    \item \textbf{Filter Controls:} Two dropdown selectors above the task table allow
+    filtering by Status (All / Pending / Completed) and Priority (All / High / Medium /
+    Low). Filters auto-submit on change via JavaScript.
+
+    \item \textbf{Input Validation:} Server-side validation ensures the title is present,
+    priority is a valid enum value, and due date is a valid date. Validation errors are
+    displayed inline below each field.
+
+    \item \textbf{Flash Messages:} Success notifications appear at the top of the page
+    after every create, update, or delete operation and automatically dismiss after a
+    few seconds.
+
+    \item \textbf{Confirmation Dialog:} A JavaScript \texttt{confirm()} dialog prompts
+    the user before any delete operation, preventing accidental data loss.
+\end{itemize}
+
+% ── Screenshots placeholder ───────────────────────────────
+% Replace the filenames below with your actual screenshot files
+% placed in the same folder as this .tex file.
+
+\subsection{Website Screenshots}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.9\textwidth]{1.png}
+\caption{Main Dashboard -- Task list with statistics and filter controls}
+\label{fig:home}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+% \includegraphics[width=0.9\textwidth]{3.png}
+\includegraphics[width=0.9\textwidth]{2.png}
+\caption{Add New Task -- Form with title, description, due date, and priority fields}
+\label{fig:add}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.9\textwidth]{4.png}
+\caption{Edit Task -- Pre-populated form allowing update of all task fields}
+\label{fig:edit}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.9\textwidth]{6.png}
+\caption{Filter Feature -- Tasks filtered by priority or status using dropdown selectors}
+\label{fig:filter}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.9\textwidth]{5.png}
+\caption{task completed}
+\label{fig:about}
+
+
+\end{figure}
+
+% ══════════════════════════════════════════════════════════
+\chapter*{Conclusion}
+\addcontentsline{toc}{chapter}{Conclusion}
+% ══════════════════════════════════════════════════════════
+
+This assignment successfully demonstrates the practical implementation of a web-based
+To-Do List Management System using the Laravel PHP framework. The application
+covers all four CRUD operations in a clean, maintainable codebase structured
+according to the MVC design pattern. Additional features -- task priority levels, due
+date tracking, status toggling, filter by status and priority, a real-time statistics
+dashboard, server-side input validation, and JavaScript confirmation dialogs -- extend
+the system beyond a basic data-entry tool into a usable, real-world task management
+application.
+
+Key learning outcomes achieved through this project include:
+\begin{itemize}[leftmargin=1.5cm]
+    \item Hands-on experience with Laravel routing, controllers, models, and
+    Blade views.
+    \item Practical understanding of Eloquent ORM for database interactions and
+    local query scopes for clean filtering logic.
+    \item Implementation of RESTful routing conventions including GET, POST, PUT,
+    PATCH, and DELETE HTTP methods.
+    \item Application of server-side validation and flash messaging for user feedback.
+    \item Use of Blade templating features including \texttt{@foreach}, \texttt{@error},
+    \texttt{@csrf}, \texttt{@method}, and layout inheritance with \texttt{@extends}
+    and \texttt{@yield}.
+    \item Use of Git and GitHub for version control throughout the development cycle.
+\end{itemize}
+
+The project can be extended in future work by adding user authentication,
+role-based access control, task categories or tags, pagination for large task lists,
+due date reminder notifications, export to CSV/PDF, and deployment to a cloud
+hosting platform.
+
+% ══════════════════════════════════════════════════════════
+% Bibliography
+% ══════════════════════════════════════════════════════════
+\begin{thebibliography}{9}
+
+\bibitem{laravel}
+Laravel LLC. (2024). \textit{Laravel Documentation -- The PHP Framework for Web
+Artisans}. Retrieved from \url{https://laravel.com/docs}
+
+\bibitem{php}
+The PHP Group. (2024). \textit{PHP Manual}. Retrieved from
+\url{https://www.php.net/manual/en/}
+
+\bibitem{bootstrap}
+The Bootstrap Authors. (2024). \textit{Bootstrap 5 Documentation}. Retrieved from
+\url{https://getbootstrap.com/docs/5.0/}
+
+\bibitem{mysql}
+Oracle Corporation. (2024). \textit{MySQL 8.0 Reference Manual}. Retrieved from
+\url{https://dev.mysql.com/doc/refman/8.0/en/}
+
+\bibitem{mvc}
+Gamma, E., Helm, R., Johnson, R., \& Vlissides, J. (1994). \textit{Design Patterns:
+Elements of Reusable Object-Oriented Software}. Addison-Wesley.
+
+\end{thebibliography}
+
+\end{document}
